@@ -73,12 +73,36 @@ com.google.android.partnersetup
 com.google.mainline.adservices
 com.google.mainline.telemetry
 
+This is simply the bare minimum required to mute the most egregious services and protect yourself.
+See the terminal scripts for a full updated version.
+
 The following are Samsung specific:
 com.samsung.klmsagent
 
 KLMS has an always-on debug tool that system-traces by default. It may break some pay-by-phone applications.
 
+## 4: Carrier Telemetry
+
+You'll want to opt-out of any and all carrier telemetry. You may need to call your carrier.
+
+T-mobile: This carrier has an app for opting out of telemetry called "Magenta", you can find it in the Google Play store. This is unnecessary for Apple phones on the T-mobile network, as they don't collect telemetry on those devices.
+
+## 5: VPN (Virtual Private/Proxy Network)
+
+Proton has a free VPN that you can use. Ensure that you go into your VPN settings and toggle "Always On", and "Block traffic not using VPN" after setup.
+
+## 6: Private DNS
+
+In the VPN settings section, there's also a section for "Private DNS". This uses DNS-Over-TLS to encrypt your domain-name lookups. Ternary Fortress has a zero-log Cloudflare account set up that you can choose to use.
+
+Simply enter: v9gab9k06l.cloudflare-gateway.com
+
+In the private DNS section.
+
+By default, Cloudflare collects telemetry on people using their services, even people who have registered an account with them. If you want your own pihole-like service, then after setting up your own account be sure to email "sar@cloudflare.com" asking to opt-out of the sale and distribution of your telemetry data.
+
+Be aware that Cloudflare enables the person hosting and managing the list to unilaterally and privately enable logging. Be sure that you trust us enough to manage the DNS blacklist and keep the logging disabled, or create your own account and manage your own lists.
+
 -------------------------------
 
-This is simply the bare minimum required to mute the most egregious services.
-See the terminal scripts for a full updated version.
+This will be updated as more information becomes available.
