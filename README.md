@@ -1,5 +1,7 @@
 # Security-Checklist
 
+!! This is a blueprint !! We need more of these !! Written by infosec professionals !!
+
 This repository is designed to serve as a rolling-update security checklist for closing the holes that big-tech's data-whoring practices open up.
 
 We wish to do our best to ensure that only necessary adjustments are made, and to maximize usability of the end-user's devices.
