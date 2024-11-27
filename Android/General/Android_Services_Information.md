@@ -1,5 +1,7 @@
 This is a list of android services, and what they (actually) do.
 
+Everything in this directory is informational and not necessary.
+
 # Work Setup - com.android.managedprovisioning
 This is for activating the Work Profile(s) on your device.
 
