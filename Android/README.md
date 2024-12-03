@@ -10,6 +10,10 @@ Apple is more respectful of both your security and privacy, however this comes w
 
 Be aware that certain brands of cheap overseas phones often have backdoors around even these fixes, and can be presumed insecure indefinitely - be careful who you trust, be skeptical of what people say online.
 
+## 0: Samsung Only: Auto-Blocker
+
+If you are ever browsing the Google Play Store, Auto-Blocker needs to be on. If you need to turn Auto-Blocker off for some reason (to use ADB, for example), temporarily disable Google Play Store and Google Play Services first, before doing so. Re-enable Auto-Blocker immediately after you're finished, and before re-enabling the Google Services Framework apps again.
+
 
 ## 1: Disable Microphone & Camera
 
