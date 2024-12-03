@@ -1,6 +1,6 @@
 # Security-Checklist
 
-!! This is a blueprint !! We need more of these !! Written by actual infosec professionals !!
+This is just a blueprint. I am not a cyber-security professional, just someone who had to tunnel their way out of Hacker-Hell, and has realized that there is not a distilled guide for doing so. If you ARE a cybersecurity professional, I would be interested in help building and maintaining this page.
 
 This repository is designed to serve as a rolling-update security checklist for closing the holes that big-tech's data-whoring practices open up.
 
