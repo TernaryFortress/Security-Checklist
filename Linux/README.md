@@ -1,3 +1,5 @@
+# So you're sick of having your digital footprint being monetized, eh?
+
 Linux can seem a bit daunting to deal with, if you've not used it before. We'll provide a brief rundown of what you need to know.
 
 For newbies, we want to select an Enterprise (not Community) distro that is both free, and which closely resembles Windows in order to ensure that as many people have access from both a financial and technical position as possible.
