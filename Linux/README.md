@@ -12,7 +12,7 @@ You don't need to understand the entirety of the domain knowledge list initially
 
 ## Domain Knowledge
 
-Terminal: The terminal window (also known as shell) is how you run most commands in Linux. You can manually type stuff, or you can create a file and run things via `bash <path-to-file>`, either by typing out a path to the file, or dragging the file into the window to auto-populate the path.
+Terminal: The terminal window (also known as shell) is how you run most commands in Linux. You can manually type stuff, or you can create a file and run things via `bash /path/to/file`, either by typing out a path to the file, or dragging the file into the window to auto-populate the path.
 
 Bashrc: Bashrc is a configuration file that runs when you open your terminal. Most of your configuration will go here. You can add things to your path by typing `open ~/.bashrc`. We suggest adding `export DO_NOT_TRACK=1` at the end of this, which is the universal environment variable for disabling telemetry. Of note, the `~` is a shortcut to your user directory, and the leading `.` before the file indicates that the file is hidden from the directory browser.
 
