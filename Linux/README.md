@@ -30,4 +30,6 @@ Bash: `bash ./file-name.sh` runs a text file as if it were in terminal. This is 
 
 Sudo: Short for "Super User DO", this effectively runs the command as administrator. ex: `sudo bash ./some-script-requiring-admin-privs.sh`
 
-Su: `su <admin-username>` allows you to switch terminal users to an admin account without logging out.
+Log in to terminal as admin: `su <admin-username>` allows you to switch terminal users to an admin account without logging out.
+
+List Network Interfaces: `ip a` will show you how your computer connects to the internet.
