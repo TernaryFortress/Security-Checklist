@@ -10,7 +10,7 @@ You don't need to understand the entirety of the domain knowledge list initially
 
 Terminal: The terminal window (also known as shell) is how you run most commands in Linux. You can manually type stuff, or you can create a file and run things via "bash <path-to-file", either by typing out a path to the file, or dragging the file into the window to auto-populate the path.
 
-Bashrc: Bashrc is a configuration file that runs when you open your terminal. Most of your configuration will go here. You can add things to your path by typing "open ~/.bashrc". We suggest adding `export DO_NOT_TRACK=1` at the end of this, which is the universal environment variable for disabling telemetry. Of note, the "~" is a shortcut to your user directory, and the "." before the file indicates that the file is hidden from the directory browser.
+Bashrc: Bashrc is a configuration file that runs when you open your terminal. Most of your configuration will go here. You can add things to your path by typing `open ~/.bashrc`. We suggest adding `export DO_NOT_TRACK=1` at the end of this, which is the universal environment variable for disabling telemetry. Of note, the `~` is a shortcut to your user directory, and the `.` before the file indicates that the file is hidden from the directory browser.
 
 Path: This is how your system figures out where files and programs are when you open terminal. In bashrc, you can add things to your path like so: `export PATH="</path/to/more/executables>:$PATH"`. For example, if I add `export PATH="/home/username/bin:$PATH"` to my bashrc, then I can run files located in that directory by simply typing "filename" in my terminal.
 
