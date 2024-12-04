@@ -10,7 +10,7 @@ You don't need to understand the entirety of the domain knowledge list initially
 
 Terminal: The terminal window (also known as shell) is how you run most commands in Linux. You can manually type stuff, or you can create a file and run things via "bash <path-to-file", either by typing out a path to the file, or dragging the file into the window to auto-populate the path.
 
-Bashrc: Bashrc is a configuration file that runs when you open your terminal. Most of your configuration will go here. You can add things to your path by typing `open ~/.bashrc`. We suggest adding `export DO_NOT_TRACK=1` at the end of this, which is the universal environment variable for disabling telemetry. Of note, the `~` is a shortcut to your user directory, and the `.` before the file indicates that the file is hidden from the directory browser.
+Bashrc: Bashrc is a configuration file that runs when you open your terminal. Most of your configuration will go here. You can add things to your path by typing `open ~/.bashrc`. We suggest adding `export DO_NOT_TRACK=1` at the end of this, which is the universal environment variable for disabling telemetry. Of note, the `~` is a shortcut to your user directory, and the leading `.` before the file indicates that the file is hidden from the directory browser.
 
 Path: This is how your system figures out where files and programs are when you open terminal. In bashrc, you can add things to your path like so: `export PATH="</path/to/more/executables>:$PATH"`. For example, if I add `export PATH="/home/username/bin:$PATH"` to my bashrc, then I can run files located in that directory by simply typing "filename" in my terminal.
 
@@ -20,7 +20,7 @@ Snap: This is Ubuntu's walled garden. Be aware that submitting applications to t
 
 ## Useful terminal commands
 
-Change Directory: `cd /path/to/directory` is a way to change the absolute position of where your terminal session lives. You can also perform `cd ..` to go up a directory, and `cd directory-name` (note the lack of a leading `/` forward slash) or `cd ./directory-name` (note the leading `.`) to change the relative position and traverse via the current directory.
+Change Directory: `cd /path/to/directory` is a way to change the absolute position of where your terminal session lives. You can also perform `cd ..` to go up a directory, and `cd directory-name` (note the lack of a leading `/` forward slash) or `cd ./directory-name` (note the leading `.` before the directory) to change the relative position and traverse via the current directory.
 
 Copy: `cp /path/to/original.txt /where/to/copy/to.txt` creates a copy of a file.
 
