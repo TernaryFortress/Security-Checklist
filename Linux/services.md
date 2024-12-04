@@ -62,9 +62,9 @@ systemctl mask --now --user tracker-extract-4
 
 ## Notes/explanations/exceptions:
 
-pipewire: This forcibly disabless your laptop's microphone.
+pipewire: This forcibly disables your laptop's microphone.
 
-bolt: Thunderbolt port, some people may need this.
+bolt: Thunderbolt port, some people may still wwant this.
 
 cups: Printer. Uses port 631 and therefore should be disabled.
 
@@ -76,7 +76,7 @@ speech-dispatcher: If you need text-to-speech, this should stay on.
 
 wpa_supplicant: This handles the wifi.
 
-tracker-miner: These services cache the contents and file names for the desktop's search feature. Disabling it safer than not. There are many variants, so we just list them all.
+tracker-miner: These services cache the contents and file names for the desktop's search feature. Disabling it is safer than not. There are many variants, so we just list them all.
 
 ## Why "mask" and not "disable"? Mask causes weird messages when updating the operating system.
 
