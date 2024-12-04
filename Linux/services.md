@@ -62,7 +62,7 @@ systemctl mask --now --user tracker-extract-4
 
 ## Notes/explanations/exceptions:
 
-pipewire: This forcibly disables your laptop's microphone.
+pipewire: This forcibly disables your computer's microphone interface.
 
 bolt: Thunderbolt port, some people may still wwant this.
 
@@ -75,6 +75,10 @@ bluetooth: Only disable this if you don't need it, or for high-security environm
 speech-dispatcher: If you need text-to-speech, this should stay on.
 
 wpa_supplicant: This handles the wifi.
+
+spice-vdagent: Sceen-sharing
+
+xdg-desktop-portal: Screen-sharing/RDP for the Wayland renderer.
 
 tracker-miner: These services cache the contents and file names for the desktop's search feature. Disabling it is safer than not. There are many variants, so we just list them all.
 
