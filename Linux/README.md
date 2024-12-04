@@ -17,3 +17,17 @@ Path: This is how your system figures out where files and programs are when you 
 NF Tables: Nft is the newer Linux firewall. For the most part, you'll just be blacklisting everything except ports 53 (dns), 67-68 (dhcp), 80 (http), 123 (ntp, date-time servers), 443 (https), 2408 (Cloudfare Warp, if you use it), and 51820 (Wireguard, if you use it).
 
 Snap: This is Ubuntu's walled garden. Be aware that submitting applications to the snap store has fewer safeguards than for something like the Apple store. Make sure that you trust the uploader.
+
+## Useful terminal commands
+
+Change Directory: `cd /path/to/directory` is a way to change the absolute position of where your terminal session lives. You can also perform `cd ..` to go up a directory, and `cd directory-name` (note the lack of a leading `/` forward slash) or `cd ./directory-name` (note the leading `.`) to change the relative position and traverse via the current directory.
+
+Copy: `cp /path/to/original.txt /where/to/copy/to.txt` creates a copy of a file.
+
+List Files: `ls -a` lists all the files in the current directory.
+
+Bash: `bash ./file-name.sh` runs a text file as if it were in terminal. This is useful for running many shell commands at once from a single file.
+
+Sudo: Short for "Super User DO", this effectively runs the command as administrator. ex: `sudo bash ./some-script-requiring-admin-privs.sh`
+
+Su: `su <admin-username>` allows you to switch terminal users to an admin account without logging out.
