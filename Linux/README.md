@@ -1,4 +1,4 @@
-# So you're sick of having your digital footprint being monetized, eh?
+# So you're sick of having your digital footprint monetized
 
 Linux can seem a bit daunting to deal with, if you've not used it before. We'll provide a brief rundown of what you need to know.
 
