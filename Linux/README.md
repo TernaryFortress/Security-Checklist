@@ -22,6 +22,8 @@ NF Tables: Nft is the newer Linux firewall. For the most part, you'll just be bl
 
 Snap: This is Ubuntu's walled garden. Be aware that submitting applications to the snap store has fewer safeguards than for something like the Apple store. Make sure that you trust the uploader.
 
+Apparmor: This is how Ubuntu decides what an installed application actually has access to. You can use it as an additional layer of defense on top of existing security features if you need to defend certain areas of your computer from being accessed by applications like your browser.
+
 ## Useful terminal commands
 
 Change Directory: `cd /path/to/directory` is a way to change the absolute position of where your terminal session lives. You can also perform `cd ..` to go up a directory, and `cd directory-name` (note the lack of a leading `/` forward slash) or `cd ./directory-name` (note the leading `.` before the directory) to change the relative position and traverse via the current directory.
