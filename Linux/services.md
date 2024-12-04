@@ -2,7 +2,7 @@ Most linux systems use systemd to manage their services.
 
 Some of these services should be disabled for security purposes. The full list of commands is below.
 
-You can also copy/download the disable-services.sh file, and run it with "sudo bash disable-services.sh" in terminal.
+You can also copy/download the disable-services.sh file (coming soon), and run it with "sudo bash disable-services.sh" in terminal.
 
 ```
 systemctl mask --now --user xdg-desktop-portal
