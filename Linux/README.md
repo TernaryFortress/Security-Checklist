@@ -4,6 +4,8 @@ For newbies, we want to select an Enterprise (not Community) distro that is both
 
 To that end, we have chosen to recommend Ubuntu: https://releases.ubuntu.com/
 
+Most users will want the latest Long-Term Support (LTS) version, which usually lasts for ~5 years. Ubuntu Pro is free for the first 5 devices.
+
 You don't need to understand the entirety of the domain knowledge list initially, but it's a useful cheat-sheet when you run into the vocabulary later and are trying to figure out what everything actually means.
 
 ## Domain Knowledge
