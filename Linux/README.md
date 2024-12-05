@@ -10,6 +10,16 @@ Most users will want the latest Long-Term Support (LTS) version, which usually l
 
 You don't need to understand the entirety of the domain knowledge list initially, but it's a useful cheat-sheet when you run into the vocabulary later and are trying to figure out what everything actually means.
 
+## Quick-fix scripts
+
+We are going to begin uploading some shell scripts that can perform these steps automatically.
+
+In order to run these scripts with admin priveleges, type `sudo bash /path/to/script.sh` in terminal, and the script will do the rest for you.
+
+We have done our best to comment all of our code, so that newbies can learn and easily edit/customize things to their own liking and preference down the road.
+
+**blacklist.sh** - Automatically disables problematic services and binaries (executables) that are often exploited by attackers.
+
 ## Domain Knowledge
 
 Terminal: The terminal window (also known as shell) is how you run most commands in Linux. You can manually type stuff, or you can create a file and run things via `bash /path/to/file`, either by typing out a path to the file, or dragging the file into the window to auto-populate the path.
