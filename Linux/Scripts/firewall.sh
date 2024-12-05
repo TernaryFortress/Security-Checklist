@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# You can automatically disable all these services with a single command!
+# You can automatically configure your system's firewall with a single command!
 # In terminal, run `sudo bash /path/to/this/file.sh`. Drag the file into terminal if you don't want to type the full path.
 
 # We need to enable the service or it won't function.
