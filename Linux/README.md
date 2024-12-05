@@ -18,7 +18,7 @@ In order to run these scripts with admin priveleges, type `sudo bash /path/to/sc
 
 We have done our best to comment all of our code, so that newbies can learn and easily edit/customize things to their own liking and preference down the road.
 
-**blacklist.sh** - Automatically disables problematic services and binaries (executables) that are often exploited by attackers.
+**blacklist.sh** - Automatically disables problematic services and binaries (executables) that are often exploited by attackers. The full rundown/explanation is found in services.md and binaries.md
 
 ## Domain Knowledge
 
