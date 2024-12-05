@@ -12,7 +12,7 @@ You don't need to understand the entirety of the domain knowledge list initially
 
 ## Quick-fix scripts
 
-We are going to begin uploading some shell scripts that can perform these steps automatically.
+We are going to begin uploading some shell scripts that can perform all of these steps automatically.
 
 In order to run these scripts with admin priveleges, type `sudo bash /path/to/script.sh` in terminal, and the script will do the rest for you.
 
