@@ -20,6 +20,8 @@ We have done our best to comment all of our code, so that newbies can learn and 
 
 **blacklist.sh** - Automatically disables problematic services and binaries (executables) that are often exploited by attackers. The full rundown/explanation is found in services.md and binaries.md
 
+**firewall.sh** - Configures a very secure port firewall using NF Tables. Only the minimum required for basic functionality is allowed through.
+
 ## Domain Knowledge
 
 **Terminal** - The terminal window (also known as shell) is how you run most commands in Linux. You can manually type stuff, or you can create a file and run things via `bash /path/to/file`, either by typing out a path to the file, or dragging the file into the window to auto-populate the path.
