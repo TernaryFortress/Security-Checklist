@@ -49,3 +49,5 @@ nft add chain inet firewall forward { type filter hook forward priority -10 \; p
 # ------- complete --------
 nft list ruleset > /etc/nftables.conf
 nft list ruleset
+
+echo "Firewall has been configured successfully!"
