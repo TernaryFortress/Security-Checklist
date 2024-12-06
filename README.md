@@ -18,6 +18,12 @@ Although still a work in progress, we intend for this to ultimately be a one-sto
 
 Insofar as my own perspective is concerned, the internet as we knew it is dead. Chatbots produce much of the content that you see, and they are being controlled by people who prioritize profit and control over our collective well-being. Let's all do our best to engage with each other in the real world, to forge real friendships and social bonds, create lasting and impactful communities, and get back to doing what we do best: Being human beings together.
 
+# Required Domain Knowledge
+
+**BIOS** - This is the software that your motherboard/logic board runs before initializing the operating system.
+
+**Operating System** - This is the software that you interact directly with 99.9% of the time. You'll likely be using iOS, Windows, or Linux.
+
 # Licensing
 
 This list is not released under any license. Do not reproduce this list or create derivatives for commercial purposes. If something is incorrect or broken, push a change request or open an issue.
