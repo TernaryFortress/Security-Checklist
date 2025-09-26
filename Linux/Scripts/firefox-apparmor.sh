@@ -1,10 +1,12 @@
 #!/bin/bash
 
-# This function needs sudo (super user/admin), since we force the apparmor profile to be immutable.
-# Of note, you will no longer be able to upload files from either your desktop or removable media.
+# AppArmor enables you restrict the permissions that an application (like your Firefox Browser) has.
+# It's your last line of defense against browser-hijacking attacks,
+# and enables you to prevent your browser from uploading important files on your Desktop.
 
 # This not a comprehensive list, because my comprehensive version is paranoid and breaks Firefox slightly.
 # This is for snap's version of Firefox (the Ubuntu app store).
+# Of note, you will no longer be able to upload files from either your desktop or removable media.
 
 iam="$(logname)"    # Let's grab the custom path quick, so we can prevent write access to user.js too
 userProfile=$(ls -d /home/$iam/snap/firefox/common/.mozilla/firefox/*.default 2>/dev/null | head -n 1)
