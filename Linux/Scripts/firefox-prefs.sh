@@ -1,12 +1,17 @@
 #!/usr/bin/env bash
 set -e
 
+# prefs.js is the file that Firefox uses to programmatically set about:config settings on startup.
+# Since prefs.js is managed by Firefox, the browser merges the user.js file into prefs.js on startup.
+# Don't alter prefs.js itself, since it will just reset on its own the next time you reload Firefox.
+
 # Your profile name
 iam="$(logname)"
 
 # The prefs.js file lives in a hidden folder with a random name. This finds that folder for us.
 userProfile=$(ls -d /home/$iam/snap/firefox/common/.mozilla/firefox/*.default 2>/dev/null | head -n 1)
 
+# Syntax for writing multiple lines at once to a file: Sandwhich text between "cat <<EOF_FF > <path/to/write/to>" && "EOF_FF"
 cat <<EOF_FF > "${userProfile}/user.js"
 user_pref("general.useragent.override", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36");
 user_pref("app.update.auto", false);
