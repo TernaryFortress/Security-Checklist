@@ -4,14 +4,18 @@
 # Of note, you will no longer be able to upload files from either your desktop or removable media.
 
 # This not a comprehensive list, because my comprehensive version is paranoid and breaks Firefox slightly.
+# This is for snap's version of Firefox (the Ubuntu app store).
 
 iam="$(logname)"    # Let's grab the custom path quick, so we can prevent write access to user.js too
 userProfile=$(ls -d /home/$iam/snap/firefox/common/.mozilla/firefox/*.default 2>/dev/null | head -n 1)
 
+path="/etc/apparmor.d/local/snap.firefox.firefox"
+#chattr -i "$path"  # Adding immutability toggles is safer, but it would make the script require admin rights.
+
 # Write our modifications using multi-line syntax for easy of management
-cat <<EOF_FF > "/etc/apparmor.d/local/snap.firefox.firefox"
+cat <<EOF_FF > "$path"
 # No editing your own rules!
-deny /etc/apparmor.d/local/snap.firefox.firefox xw,
+deny $path xw,
 deny /var/lib/snapd/apparmor/profiles/snap.firefox.firefox xw,
 deny /usr/lib/firefox/distribution/policies.json xw,
 deny $userProfile/user.js xw,
@@ -195,3 +199,5 @@ deny /usr/lib/xorg/** xw,
 deny /usr/lib/xorg[^/]** xrw,
 deny /usr/share[^/]** xrw,
 EOF_FF
+
+# chattr +i "$path"
