@@ -2,7 +2,7 @@
 
 # AppArmor enables you to restrict the permissions that an application (like your Firefox Browser) has.
 # It's your last line of defense against browser-hijacking attacks,
-# and enables you to prevent your browser from uploading important files on your Desktop.
+# and empowers you to prevent your browser from uploading important files on your system.
 
 # This not a comprehensive list, because my comprehensive version is paranoid and breaks Firefox slightly.
 # This is for snap's version of Firefox (the Ubuntu app store).
