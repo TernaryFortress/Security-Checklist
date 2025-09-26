@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# AppArmor enables you restrict the permissions that an application (like your Firefox Browser) has.
+# AppArmor enables you to restrict the permissions that an application (like your Firefox Browser) has.
 # It's your last line of defense against browser-hijacking attacks,
 # and enables you to prevent your browser from uploading important files on your Desktop.
 
