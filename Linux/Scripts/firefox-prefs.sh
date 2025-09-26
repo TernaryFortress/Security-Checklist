@@ -13,6 +13,7 @@ userProfile=$(ls -d /home/$iam/snap/firefox/common/.mozilla/firefox/*.default 2>
 
 # Syntax for writing multiple lines at once to a file: Sandwhich text between "cat <<EOF_FF > <path/to/write/to>" && "EOF_FF"
 cat <<EOF_FF > "${userProfile}/user.js"
+// We really want a Windows user-agent
 user_pref("general.useragent.override", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36");
 user_pref("app.update.auto", false);
 user_pref("app.update.enabled", false);
@@ -98,6 +99,7 @@ user_pref("media.gmp-manager.allowLocalSources", false);
 user_pref("media.gmp-provider.enabled", false);
 user_pref("media.navigator.enabled", false);
 user_pref("media.navigator.permission.disabled", true);
+// ICE and STUN servers are responsible for peer-to-peer attacks.
 user_pref("media.peerconnection.allow_old_setParameters", false);
 user_pref("media.peerconnection.enabled", false);
 user_pref("media.peerconnection.ice.no_host", true);
