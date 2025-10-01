@@ -24,6 +24,9 @@ Insofar as my own perspective is concerned, the internet as we knew it is dead. 
 
 **Operating System** - This is the software that you interact directly with 99.9% of the time. You'll likely be using iOS, Windows, or Linux.
 
+**Security Key** - Security Keys are a *password replacement* technology, and are quickly becoming the norm for enterprise security. Ubuntu even allows you to replace your password with a security key using the libpam-u2f library. Please backup any important files prior to attempting this, as you may get locked out of your system.
+
+
 # Licensing
 
 This list is not released under any license. Do not reproduce this list or create derivatives for commercial purposes. If something is incorrect or broken, push a change request or open an issue.
