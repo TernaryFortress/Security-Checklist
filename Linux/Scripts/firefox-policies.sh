@@ -47,7 +47,7 @@ cat <<EOF_FF > /etc/firefox/policies/policies.json
   },
   "SanitizeOnShutdown": {
     "Cache": true,
-    "Cookies": true,
+    "Cookies": false,
     "Downloads": true,
     "FormData": true,
     "History": true,
@@ -139,8 +139,8 @@ cat <<EOF_FF > /etc/firefox/policies/policies.json
       "Default": true,
       "RejectTracker": true,
       "Locked": true,
-      "Behavior": "reject",
-      "BehaviorPrivateBrowsing": "reject"
+      "Behavior": "reject-tracker-and-partition-foreign",
+      "BehaviorPrivateBrowsing": "reject-tracker-and-partition-foreign"
     },
     "Permissions": {
       "Camera": {
