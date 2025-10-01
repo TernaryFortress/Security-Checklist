@@ -4,7 +4,7 @@ set -e
 mkdir -p /etc/firefox/policies
 
 # Multi-line write syntax
-cat <<EOF_FF > /usr/lib/firefox/distribution/policies.json
+cat <<EOF_FF > /etc/firefox/policies/policies.json
 {
   "policies": {
     "BlockAboutSupport": true,
