@@ -31,5 +31,6 @@ Insofar as my own perspective is concerned, the internet as we knew it is dead. 
 
 This list is not released under any license. Do not reproduce this list or create derivatives for commercial purposes. If something is incorrect or broken, push a change request or open an issue.
 
+Additionally, I am going to begin compiling a closed-source version of this toolkit for friends and family. Hopefully this is enough of a start to feel safe behind.
 
 
