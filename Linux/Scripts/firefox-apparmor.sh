@@ -3,6 +3,7 @@
 # After running this, you will NO LONGER be able to update firefox _UNLESS_ you run:
 # sudo chattr -i /var/lib/snapd/apparmor/profiles/snap.firefox.firefox
 # before doing so. I literally cannot find a workaround to this yet.
+# Any updates will reset the apparmor profile and necessitate running this script again.
 
 # AppArmor enables you to restrict the permissions that a snap application (like your Firefox Browser) has.
 # It's your last line of defense against browser-hijacking attacks,
