@@ -15,16 +15,21 @@
 
 # You can't update snap without running:
 
-iam="$(logname)"
-existingProfile="/var/lib/snapd/apparmor/profiles/snap.firefox.firefox"
+iam="${1:-$(logname)}"
 userProfile=$(ls -d /home/$iam/snap/firefox/common/.mozilla/firefox/*.default 2>/dev/null | head -n 1)
+apparmorPath="/var/lib/snapd/apparmor/profiles/snap.firefox.firefox"
+# Using the /usr/ path creates immutable phantom apparmor profiles that prevent firefox from ever updating.
 
-# Let's update snap's profile.
-chattr -i "$existingProfile"
-sed -i ':a;N;$!ba;s/}\s*$//' $existingProfile	# Drop the closing brace
-cat <<EOF_FF >> "$existingProfile"
+chattr -i "$apparmorPath"
+chmod +w "$apparmorPath"
+
+# Strip the trailing '}' from the end of the file.
+sed -i ':a;N;$!ba;s/}\s*$//' "$apparmorPath"
+
+# Our blocklist (we are VERY thorough).
+cat <<EOF_FF >> "$apparmorPath"
 # No editing your own rules!
-deny $existingProfile w,
+deny $apparmorPath w,
 deny /etc/firefox/** w,
 deny $userProfile/user.js w,
 
@@ -1418,7 +1423,9 @@ deny /usr/share/xml/iso[^-]** xrw,
 deny /usr/share/xml[^/]** xrw,
 deny /usr/share[^/]** xrw,
 EOF_FF
-echo "}" >> $existingProfile	# Add the closing brace back in
-chattr +i "$existingProfile"	# Make immutable, to prevent tampering.
 
-apparmor_parser -r $existingProfile
+# Add the trailing '}' character again.
+echo "}" >> "$apparmorPath"
+chmod -w "$apparmorPath"
+chattr +i "$apparmorPath"
+apparmor_parser -r "$apparmorPath"
