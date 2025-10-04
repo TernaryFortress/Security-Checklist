@@ -1,7 +1,17 @@
-#!/usr/bin/env bash
-set -e
+#!/bin/bash
+#/usr/bin/env bash - Is this a solution to our sudo problem?
 
-mkdir -p /etc/firefox/policies
+iam="${1:-$(logname)}"	# Not used, but included for consistency.
+path=/etc/firefox/policies
+mkdir -p "$path"
+
+# If the file exists, make it mutable. Otherwise, create it.
+
+if [[ -f "$path/policies.json" ]]; then
+    touch "$path/policies.json"
+fi
+
+chattr -i "$path/policies.json"
 
 # Multi-line write syntax
 cat <<EOF_FF > /etc/firefox/policies/policies.json
@@ -40,6 +50,7 @@ cat <<EOF_FF > /etc/firefox/policies/policies.json
     "Locked": true
   },
   "EnableTrackingProtection": {
+    "Category": "strict",
     "Value": true,
     "Locked": true,
     "Cryptomining": true,
@@ -222,3 +233,6 @@ cat <<EOF_FF > /etc/firefox/policies/policies.json
   }
 }
 EOF_FF
+
+chmod -w /etc/firefox/policies/policies.json
+chattr +i /etc/firefox/policies/policies.json
