@@ -1,6 +1,19 @@
-# So you're sick of having your digital footprint monetized
+# A basic, open-source security suite for Linux.
 
-Linux can seem a bit daunting to deal with, if you've not used it before. We'll provide a brief rundown of what you need to know.
+Linux can seem a bit daunting to deal with, if you've not used it before. We provide two easy scripts:
+
+```
+sudo bash ./firefox.sh
+sudo bash ./startup.sh
+```
+
+The first installs and hardens Snap's Firefox. It's so hard in fact, that the only way to update Firefox after running this script is to run the script again.
+
+The second configures a firewall and blacklists a bunch of services that have been known for RDP exploits and other state actor backdoors.
+
+## Info for newcomers
+
+We'll provide a brief rundown of what you need to know.
 
 For newbies, we want to select an Enterprise (not Community) distro that is both free, and which closely resembles Windows in order to ensure that as many people have access from a financial, technical, and secure position as possible.
 
