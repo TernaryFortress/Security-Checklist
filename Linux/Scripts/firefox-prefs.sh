@@ -6,7 +6,7 @@ set -e
 # Don't alter prefs.js itself, since it will just reset on its own the next time you reload Firefox.
 
 # Your profile name
-iam="$(logname)"
+iam="${1:-$(logname)}"
 
 # The prefs.js file lives in a hidden folder with a random name. This finds that folder for us.
 userProfile=$(ls -d /home/$iam/snap/firefox/common/.mozilla/firefox/*.default 2>/dev/null | head -n 1)
@@ -146,3 +146,7 @@ user_pref("toolkit.telemetry.unified", false);
 user_pref("toolkit.telemetry.unifiedIsOptIn", false);
 user_pref("toolkit.telemetry.updatePing.enabled", false);
 EOF_FF
+
+chown $iam "${userProfile}/user.js"
+chmod -w "${userProfile}/user.js"
+chattr +i "${userProfile}/user.js"
