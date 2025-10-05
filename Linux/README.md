@@ -1,6 +1,6 @@
 # A basic, open-source security suite for Linux.
 
-A focus on quality, in a world gone to shit.
+Free, open, secure.
 
 ## Info for newcomers
 
