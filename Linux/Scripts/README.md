@@ -1,6 +1,8 @@
 # A basic, open-source security suite for Linux.
 
-Linux can seem a bit daunting to deal with, if you've not used it before. We provide two easy scripts:
+Linux can seem a bit daunting to deal with, if you've not used it before. We provide two easy scripts.
+
+Open terminal in this directory, and run:
 
 ```
 sudo bash ./firefox.sh
