@@ -6,12 +6,13 @@
 # Running this script is the ONLY way to update Firefox now!
 
 iam="${1:-$(logname)}"
+profilePath=$(find /home/$iam/snap/firefox/common/.mozilla/firefox -type d -name *.default 2>/dev/null)
 
 # Ordering matters a lot here.
 
 # If apparmor is frozen, we are literally prevented from updating.
 chattr -i "/var/lib/snapd/apparmor/profiles/snap.firefox.firefox"
-#chattr -i "/etc/apparmor.d/local/snap.firefox.firefox"
+chattr -i "$profilePath/user.js"
 
 bash ./firefox/firefox-policies.sh "$iam"
 
