@@ -12,7 +12,8 @@ iam="${1:-$(logname)}"
 userProfile=$(ls -d /home/$iam/snap/firefox/common/.mozilla/firefox/*.default 2>/dev/null | head -n 1)
 
 # Syntax for writing multiple lines at once to a file: Sandwhich text between "cat <<EOF_FF > <path/to/write/to>" && "EOF_FF"
-cat <<EOF_FF > "${userProfile}/user.js"
+#cat <<EOF_FF > "${userProfile}/user.js"
+cat <<EOF_FF > "$(ls -d /home/$iam/snap/firefox/common/.mozilla/firefox/*.default 2>/dev/null | head -n 1)/user.js"
 // We really want a Windows user-agent
 user_pref("general.useragent.override", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36");
 user_pref("app.update.auto", false);
@@ -147,6 +148,6 @@ user_pref("toolkit.telemetry.unifiedIsOptIn", false);
 user_pref("toolkit.telemetry.updatePing.enabled", false);
 EOF_FF
 
-chown $iam "${userProfile}/user.js"
-chmod -w "${userProfile}/user.js"
+chown "$iam" "${userProfile}/user.js"
+chmod a=w "${userProfile}/user.js"
 chattr +i "${userProfile}/user.js"
