@@ -111,7 +111,7 @@ bin_locations=(
 	"/etc/rc6.d/"
 )
 
-# Merge our service & binaries arrays, discarding duplicates.
+# If the file doesn't exist, make it and add the shebang at the top.
 touchScript() {			# touchScript "/full/path
 	if [ ! -f "$1" ];  then # Creates a script file if it doesn't exist.
 		echo "#!/bin/sh" > $1
@@ -138,6 +138,7 @@ lineAndExecute() {
  	fi
 }
 
+# Literally just checks if the service has a bin file or not, to cut down on the size of our startup service.
 serviceExists() {
     systemctl show "${1}" > /dev/null 2>&1
     return $?
