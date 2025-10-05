@@ -1,71 +1,48 @@
 #!/bin/bash
 
-# You can automatically disable all these services with a single command!
-# In terminal, run `sudo bash /path/to/this/file.sh`. Drag the file into terminal if you don't want to type the full path.
-
+# There's code here to run this for multiple users, which you don't need to worry about.
 
 # We don't want to retype the startup file every time, so we'll define a variable for it.
-startup_file_name="startup_security.sh"
+iam="${1:-$(logname)}"
+admin=$(logname)
+path="$(realpath ./)"
+blacklistPath="/etc/modprobe.d/blacklist.conf"
+startupService="/etc/init.d/${iam}sec.sh"
 
 # We'll define our services in an array to make it easier to add new ones later.
-services_blacklist=(
-	xdg-desktop-portal
-	pipewire
+servicesBlacklist=(
 	apport
+	apport-core-dump-handler
+	avahi-browse
 	avahi-daemon.socket
 	avahi-daemon
-	bolt
-	colord
-	bluetooth
-	cups.path
-	cups.socket
-	cups
-	cups-browsed
-	geoclue
-	gsd-print-notification
-	gnome-remote-desktop
-	ModemManager
-	openvpn
-	iio-sensor-proxy
-	Remmina
-	speech-dispatcher
-	saned
-	spice-vdagent
-	spice-vdagentd
-	wpa_supplicant
-	xrdp
-	xbrlapi
-	tracker-miner
-	tracker-miner-2
-	tracker-miner-3
-	tracker-miner-4
-	tracker-miner-fs
-	tracker-miner-fs-2
-	tracker-miner-fs-3
-	tracker-miner-fs-4
-	tracker-extract
-	tracker-extract-2
-	tracker-extract-3
-	tracker-extract-4
-)
-
-binaries_blacklist=(
-	apport				# crash reporter
-	avahi-browse			# avahi is local network-sharing.
-	avahi-daemon
 	avahi-resolve
+	bolt
+	bluetooth
 	bluetoothctl
 	bluetooth-sendto
 	bluetoothd
 	cc-remote-login-helper
+	color
 	colord-sane
 	colord-session
+	cups.path
+	cups.socket
 	cups				# cups is printer software
+	cups-browsed			
 	cupsaccept			# The printer port (631) is a common attack vector.
 	cupsd
 	cupsctl
 	cups-browse
+	cloud-config
+	cloud-final
+	cloud-init-hotplugd.socket
+	cloud-init-hotplugd
+	cloud-init-local
+	configure-printer
 	geoclue
+	gsd-print-notification
+	gnome-remote-desktop
 	gnome-remote-desktop-daemon
 	gvfsd-ftp			# The Gnome desktop's network File Transfer Protocol
 	gvdsd-metadata			# We don't want to store metadata.
@@ -77,18 +54,24 @@ binaries_blacklist=(
 	gsd-sharing
 	inetutils-telnet
 	install-printerdriver
+	iio-sensor-proxy
+	ModemManager
 	mtp-probe
+	openvpn
+	PrintNotifications
+	pipewire
+	Remmina
 	rsync
 	rsync-ssl
 	sane-find-scanner
-	sane				# Scanner
-	speech-dispatcher		# Speech synth
+	sane
 	spice-vdagent
+	speech-dispatcher		# Speech synth
+	samba
+	saned
+	spice-vdagent
+	spice-vdagentd
 	telnet				# A commonly abused protocol
-	xbrlapi				# Speech tool
-	ubuntu-report
-	xrdp				# Remote desktop binary
-	xdg-desktop-portal		# Wayland's screen-sharing utility
 	tracker-miner
 	tracker-miner-2
 	tracker-miner-3
@@ -101,6 +84,14 @@ binaries_blacklist=(
 	tracker-extract-2
 	tracker-extract-3
 	tracker-extract-4
+	ubuntu-report
+	wpa_supplicant
+	xrdp				# Remote desktop binary
+	xbrlapi				# Speech tool
+	xdg-desktop-portal
+	hp-*
+	tracker*
+	#sshd				# Optional stuff starts here.		
 )
 
 # Binaries don't actually live in one centralized location. Here's a short list of where we can search for them
@@ -120,79 +111,102 @@ bin_locations=(
 	"/etc/rc6.d/"
 )
 
-# Now we'll define some functions to make it easier to understand what the code does.
-
-# touchScript creates the target file if it doesn't already exist, and then makes it executable for the system.
-# Called like so: (touchScript "/full/path")
-touchScript() {
-	if [ ! -f "$1" ];  then
+# Merge our service & binaries arrays, discarding duplicates.
+touchScript() {			# touchScript "/full/path
+	if [ ! -f "$1" ];  then # Creates a script file if it doesn't exist.
 		echo "#!/bin/sh" > $1
 		chmod +x $1
 	fi
 }
 
-# uniqueLine adds a text line to a file if-and-only-if that line doesn't already exist verbatim.
-# Called like so: (uniqueLine "line" "file")
+# Adds a line to a file only if it doesn't already exist (verbatim)
 uniqueLine() {
-	line=$1 && file=$2
-	grep -qsxF -- $line $file || echo "${line}" >> $file
+	line=$1 && file=$2	# uniqueLine "line" "file"
+	grep -qsxF -- "$line" "$file" || echo "$line" >> "$file"
 }
 
-# muteBinary handles all the logic for disabling binaries (basically Linux's equivalent to a .exe file)
-# Called like so: (muteBinary 'location' 'name')
-muteBinary() {
-	# First, we symlink the script to /dev/null so that all future calls to it will fail.
-	ln -fs /dev/null "${1}${2}"
-	
-	# Next, we make the file immutable so that the symlink is permanent.
-	chattr +i ${1}${2}
-	
-	# Next we'll make sure that these files can't be updated either.
-	echo "$(apt-mark hold $2)" > /dev/null
-	# Many services have a daemon variant that's identical, but ends with an extra "d".
-	echo "$(apt-mark hold "${2}d")" > /dev/null
+# Executes a command, and then adds it to our startup script if it succeeded.
+lineAndExecute() {
+	command="$1"
+	# We can switch back to using eval if the subshell stuff doesn't work out.
+	bash -c "$command > /dev/null 2>&1" > /dev/null 2>&1
 
-	# Let's make sure these commands run at startup too.
-	(uniqueLine "ln -fs /dev/null ${1}${2}" "/etc/init.d/${startup_file_name}")
-	(uniqueLine "chattr +i ${1}${2}" "/etc/init.d/${startup_file_name}")
+	# Check if the command was successful (exit status 0)
+	if [ $? -eq 0 ]; then
+        	touchScript "$startupService"
+        	uniqueLine "$command" "$startupService"
+ 	fi
 }
 
-# muteService handles all the logic for disabling services (basically Linux's equivalent to a .exe file)
-# Called like so: (muteService 'name')
+serviceExists() {
+    systemctl show "${1}" > /dev/null 2>&1
+    return $?
+}
+
+# This runs the logic for blacklisting both services AND binaries, because why take chances.
 muteService() {
-	# mask --now redirects the service to /dev/null so that all future calls to it will fail.
-	systemctl mask --now $1
+	service="$1"
 	
-	# Some services run in the user space, so we want to address that, too.
-	systemlctl mask --now --user $1
+	# We need the full "cups.service" for some function, but we don't want to ruin "cups.socket", so we filter for those first.
+	if [[ ! "${service}" =~ \..+$ ]]; then
+    		fullService="${service}.service"
+    	else
+    		fullService=$service
+	fi
 	
-	# Now we add these commands to our startup file, too.
-	uniqueLine "systemctl mask --now ${1}" "/etc/init.d/${startup_file_name}"
-	uniqueLine "systemctl mask --now --user ${1}" "/etc/init.d/${startup_file_name}"
+	# Checks to cut down on the number of lines in our startup file. We can't use execution status, since sysctl always completes.
+	if find /etc/systemd/system /lib/systemd/system /usr/lib/systemd/system ~/.config/systemd/user/ -name "$fullService" -print -quit > /dev/null 2>&1; then
+		lineAndExecute "systemctl mask --now $service"
+	fi
+
+	# Some things have a daemon but no service, and those still "complete". There's not much helping it.
+	if find /etc/systemd/system /lib/systemd/system /usr/lib/systemd/system ~/.config/systemd/user/ -name "${fullService}d" -print -quit > /dev/null 2>&1; then
+		lineAndExecute "systemctl mask --now ${service}d"
+	fi
+
+	lineAndExecute "apt-mark hold $service"
+	lineAndExecute "apt-mark hold ${service}d"
+	lineAndExecute "runuser -l \$(logname) -c \"XDG_RUNTIME_DIR=/run/user/\$(id -u \$(logname)) systemctl mask --now --user ${service}\""
+	lineAndExecute "runuser -l \$(logname) -c \"XDG_RUNTIME_DIR=/run/user/\$(id -u \$(logname)) systemctl mask --now --user ${service}d\""
+	
+	if ! grep -qFx "blacklist $service" "$blacklistPath"; then
+    		lineAndExecute "echo \"blacklist $service\" | sudo tee -a $blacklistPath > /dev/null"
+	fi
+
+	for loc in "${bin_locations[@]}"; do
+		# Combine the location and service into the full file path
+    		file_path="${loc}${service}"
+    
+    		if [ -e "$file_path" ]; then  # Check if the file exists
+        		lineAndExecute "ln -fs /dev/null \"$file_path\""
+        		lineAndExecute "chattr +i \"$file_path\""
+    		fi
+	done
 }
 
-# We're going to tell these commands to run at startup too, so we'll make sure that the file exists.
-touchScript "/etc/init.d/startup_security.sh"
+# If there's an existing service file, it's probably immutable. Let's fix that.
+if [ -e "$startupService" ]; then 
+	chattr -i "$startupService"
+fi
 
-# The file shouldn't be immutable yet, but if you've run this script multiple times it might be.
-chattr -i "/etc/init.d/${startup_file_name}"
-
-# Next, we're going to iterate through our arrays in order to disable everything.
-for service in "${service_blacklist[@]}"; do
-	(muteService "${service}")
+for service in "${servicesBlacklist[@]}"; do
+	muteService "$service"
 done
 
-# For this one, we iterate through both the binaries list AND the locations list, in order to check every location for every binary.
-for bin in "${binaries_blacklist[@]}"; do
-	for loc in "${bin_locations[@]}"; do
- 		# Check if file actually exists first before banning it
-		if [ -f "${loc}${bin}" ]; then
-			(muteBinary "$loc" "$bin")
-		fi
-	done
-done
+chattr +i "$startupService"
 
-# Finally, we'll make the startup script immutable, so that bad actors can't edit it without admin privs.
-chattr +i "/etc/init.d/${startup_file_name}"
+# Add a new systemctl service for our security script, so that our filters re-run at startup.
+cat <<EOF_FF > "/etc/systemd/system/${iam}sec.service"
+[Unit]
+Description=Security Controller
+After=graphical.target
 
-echo "Aaaaand we're done!"
+[Service]
+ExecStart=/etc/init.d/${iam}sec.sh
+
+[Install]
+WantedBy=multi-user.target
+EOF_FF
+
+# Enable our service.
+systemctl enable --now "${iam}sec"
