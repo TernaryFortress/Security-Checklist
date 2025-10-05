@@ -43,3 +43,6 @@ sleep 0.5
 if pgrep -x "firefox" > /dev/null; then
 	pkill firefox
 fi
+
+clear
+echo "Firefox is installed, hardened, and initialized."
