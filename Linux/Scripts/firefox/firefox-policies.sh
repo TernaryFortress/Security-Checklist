@@ -153,6 +153,8 @@ cat <<EOF_FF > /etc/firefox/policies/policies.json
       "Behavior": "reject-tracker-and-partition-foreign",
       "BehaviorPrivateBrowsing": "reject-tracker-and-partition-foreign"
     },
+    "DefaultDownloadDirectory": "/home/$iam/Downloads",
+    "HttpsOnlyMode": "force_enabled",
     "Permissions": {
       "Camera": {
         "BlockNewRequests": true,
