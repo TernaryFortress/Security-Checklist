@@ -4,6 +4,7 @@ iam="${1:-$(logname)}"
 userProfile=$(ls -d /home/$iam/snap/firefox/common/.mozilla/firefox/*.default 2>/dev/null | head -n 1)
 apparmorPath="/var/lib/snapd/apparmor/profiles/snap.firefox.firefox"
 policiesProfile="/etc/firefox/policies/policies.json"
+path="$(realpath ./)"
 
 # The final "production" configuration set.
 firefoxSnapControl() {
@@ -62,11 +63,21 @@ firefoxInitialization() {
 	sleep 5
 
 	echo "Please wait while we install addons."
-	runuser -l $iam -c "DISPLAY=${DISPLAY} /snap/bin/firefox" > /dev/null 2>&1 &
+	if [ "$iam" != "$admin" ]; then
+		runuser -l $iam -c "DISPLAY=${DISPLAY} /snap/bin/firefox" > /dev/null 2>&1 &
+	else
+		firefox
+	fi
+	
 	sleep 10
 
 	echo "Initializing done, killing process"
-	pkill firefox
+# Shuts down firefox. Should work for all permutations
+	pkill -r firefox
+	sleep 0.5
+	if pgrep -x "firefox" > /dev/null; then
+		killall firefox
+	fi
 	sleep 2
 
 	snap connect firefox:home :home
@@ -74,26 +85,41 @@ firefoxInitialization() {
 	snap connect firefox:dot-mozilla-firefox :personal-files
 }
 
-pkill firefox
+# Shuts down firefox. Should work for all permutations
+pkill -r firefox
+sleep 0.5
+if pgrep -x "firefox" > /dev/null; then
+	killall firefox
+fi
+
 chattr -i "$apparmorPath"
 chattr -i "$userProfile/user.js"
-chmod +wr "$apparmorPath"
-chmod +wr "$userProfile/user.js"
+chmod a=wr "$apparmorPath"
+chmod a=wr "$userProfile/user.js"
 
 gsettings set org.mozilla.firefox.desktop allow-background false
+#chmod -R +w /home/$iam/snap/firefox/
 
 snap remove --purge firefox
 sleep 5
 rm -rf /var/lib/snapd/snaps/firefox_*.snap
 snap refresh --list
 snap install firefox
-sleep 1
+sleep 2
 (firefoxSnapControl)
+sleep 2
 (firefoxInitialization)
 
 echo "Updating preferences."
 profilePath=$(find /home/$iam/snap/firefox/common/.mozilla/firefox -type d -name *.default 2>/dev/null)
+
 if [[ -z "$profilePath" ]]; then
     echo "*.default profile not found."
     exit 1
+fi
+
+pkill -r firefox
+sleep 0.5
+if pgrep -x "firefox" > /dev/null; then
+	killall firefox
 fi
