@@ -22,5 +22,24 @@ bash ./firefox/firefox-update.sh "$iam"
 # ff-prefs requires ff-update be complete.
 bash ./firefox/firefox-prefs.sh "$iam"
 
+echo "Please wait while we install addons."
+if [ "$iam" != "$admin" ]; then
+	runuser -l $iam -c "DISPLAY=${DISPLAY} /snap/bin/firefox" > /dev/null 2>&1 &
+else
+	firefox
+fi
+sleep 3
+pkill -r firefox
+sleep 0.5
+if pgrep -x "firefox" > /dev/null; then
+	pkill firefox
+fi
+
 # ff-apparmor prevents any of the above from working.
 bash ./firefox/firefox-apparmor.sh "$iam"
+
+pkill -r firefox
+sleep 0.5
+if pgrep -x "firefox" > /dev/null; then
+	pkill firefox
+fi
