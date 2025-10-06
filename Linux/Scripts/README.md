@@ -13,6 +13,12 @@ The first installs and hardens Snap's Firefox. It's so hard in fact, that the on
 
 The second configures a firewall and blacklists a bunch of services that have been known for RDP exploits and other state actor backdoors.
 
-## Our Apparmor profile is *extremely* thorough.
+## Quirks
 
-Of note, Firefox can only access files in the "Documents" folder, and some tools (mainly the File explorer) may be broken. There are plans to fix this at a later date when I have more time.
+Firefox is only supposed to be able to access & upload generic files from the Documents folder.
+
+## Known Issues
+
+[_] When using Firefox, the File Explorer often does not work. Drag files into the browser to upload for now.
+
+[_] Disabling TrackerMiner (Ubuntu's File Indexer) causes it to crash when opening a directory for the first time.
