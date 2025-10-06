@@ -21,4 +21,4 @@ Firefox is only supposed to be able to access & upload generic files from the Do
 
 [_] - When using Firefox, attempting to upload files via the browser's File Explorer often does not work. Drag files into the browser to upload for now.
 
-[_] - Disabling TrackerMiner (Ubuntu's File Indexer) causes it to crash when opening a directory for the first time.
+[_] - Disabling TrackerMiner (Ubuntu's File Indexer) causes the indexer to crash when opening a directory for the first time.
