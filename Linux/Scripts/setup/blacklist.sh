@@ -184,7 +184,10 @@ for service in "${servicesBlacklist[@]}"; do
 	muteService "$service"
 done
 
-# Stops tracker from crashing.
+# Universal 'Do Not Track' environment variable.
+export "export DO_NOT_TRACK=1" >> /home/$iam/.bashrc
+
+# An alternative to disabling TrackerMiner that should aid window times.
 echo "export GIO_NO_TRACKER=1" >> /home/$iam/.profile
 
 chattr +i "$startupService"
