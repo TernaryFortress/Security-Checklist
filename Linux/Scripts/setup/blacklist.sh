@@ -2,9 +2,12 @@
 
 # There's code here to run this for multiple users, which you don't need to worry about.
 
-# We don't want to retype the startup file every time, so we'll define a variable for it.
+# This is literally a) the first parameter passed to the function and/or b) the name of the account running the script.
+# You can user 'echo $(logname)' to print this to console if you'd like to verify. We use it to handle installations with multiple users.
 iam="${1:-$(logname)}"
 admin=$(logname)
+
+# We don't want to retype the startup file every time, so we'll define a variable for it.
 path="$(realpath ./)"
 blacklistPath="/etc/modprobe.d/blacklist.conf"
 startupService="/etc/init.d/${iam}sec.sh"
@@ -72,25 +75,12 @@ servicesBlacklist=(
 	spice-vdagent
 	spice-vdagentd
 	telnet				# A commonly abused protocol
-	tracker-miner
-	tracker-miner-2
-	tracker-miner-3
-	tracker-miner-4
-	tracker-miner-fs
-	tracker-miner-fs-2
-	tracker-miner-fs-3
-	tracker-miner-fs-4
-	tracker-extract
-	tracker-extract-2
-	tracker-extract-3
-	tracker-extract-4
 	ubuntu-report
 	wpa_supplicant
 	xrdp				# Remote desktop binary
 	xbrlapi				# Speech tool
 	xdg-desktop-portal
 	hp-*
-	tracker*
 	#sshd				# Optional stuff starts here.		
 )
 
@@ -193,6 +183,9 @@ fi
 for service in "${servicesBlacklist[@]}"; do
 	muteService "$service"
 done
+
+# Stops tracker from crashing.
+echo "export GIO_NO_TRACKER=1" >> /home/$iam/.profile
 
 chattr +i "$startupService"
 
