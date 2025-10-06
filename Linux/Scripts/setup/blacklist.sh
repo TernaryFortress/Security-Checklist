@@ -187,8 +187,13 @@ done
 # Universal 'Do Not Track' environment variable.
 echo "export DO_NOT_TRACK=1" >> /home/$iam/.bashrc
 
-# An alternative to disabling TrackerMiner that should aid window times.
+# An alternative to disabling TrackerMiner indexing services that should aid window times.
 echo "export GIO_NO_TRACKER=1" >> /home/$iam/.profile
+
+# Lowers the priority ('niceness') of the indexing service in the background, which halts way less.
+sed -si '/Exec=\/usr\/libexec\/tracker-miner-fs-3/s/^Exec=/&\/usr\/bin\/nice -n 13 /' \
+	/etc/xdg/autostart/tracker-miner-fs-3.desktop \
+	/usr/lib/systemd/user/tracker-miner-fs-3.service
 
 chattr +i "$startupService"
 
