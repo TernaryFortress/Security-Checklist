@@ -14,44 +14,44 @@ startupService="/etc/init.d/${iam}sec.sh"
 
 # We'll define our services in an array to make it easier to add new ones later.
 servicesBlacklist=(
-	apport
+	apport				# Reporting software. Some applications might use this for logging.
 	apport-core-dump-handler
-	avahi-browse
+	avahi-browse		# File share
 	avahi-daemon.socket
 	avahi-daemon
 	avahi-resolve
-	bolt
-	bluetooth
+	bolt				# Thunderbolt port (external GPU's and other high-transit serial port hardware)
+	bluetooth			# We disable Bluetooth by default
 	bluetoothctl
 	bluetooth-sendto
 	bluetoothd
 	cc-remote-login-helper
-	color
+	color				# Color profile manager.
 	colord-sane
 	colord-session
 	cups.path
 	cups.socket
-	cups				# cups is printer software
-	cups-browsed			
-	cupsaccept			# The printer port (631) is a common attack vector.
-	cupsd
+	cups				# cups is printer software, but it's also a Man-on-the-Side target (port 631) 
+	cups-browsed		# Browser for printers
+	cupsaccept
 	cupsctl
 	cups-browse
-	cloud-config
+	cloud-config		# These are startup profiles for apps. Personally, I prefer to use shell-scripts.
 	cloud-final
 	cloud-init-hotplugd.socket
 	cloud-init-hotplugd
-	cloud-init-local
+	cloud-init-local	# Startup profiles (first launch configuration)
 	configure-printer
-	geoclue
+	geoclue				# Physical location
 	gsd-print-notification
-	gnome-remote-desktop
+	gnome-remote-desktop			# RDP bad!
 	gnome-remote-desktop-daemon
 	gvfsd-ftp			# The Gnome desktop's network File Transfer Protocol
 	gvdsd-metadata			# We don't want to store metadata.
 	gvfsd-sftp
 	gvfsd-smb			# We don't like local network stuff.
 	gvfsd-smb-browse
+	#gvfsd-trash		# This causes latency problems on some systems. Uncomment if you experience slowdowns.
 	gsd-printer
 	gsd-print-notifications
 	gsd-sharing
@@ -62,24 +62,22 @@ servicesBlacklist=(
 	mtp-probe
 	openvpn
 	PrintNotifications
-	pipewire
-	Remmina
+	pipewire					# This physically disables the speaker and microphone. Recommended to comment out for civillian systems.
+	Remmina						# Remote Desktop Protocol. RDP's are very common exploit vehicles.
 	rsync
 	rsync-ssl
-	sane-find-scanner
-	sane
-	spice-vdagent
-	speech-dispatcher		# Speech synth
-	samba
-	saned
-	spice-vdagent
-	spice-vdagentd
-	telnet				# A commonly abused protocol
-	ubuntu-report
-	wpa_supplicant
-	xrdp				# Remote desktop binary
-	xbrlapi				# Speech tool
-	xdg-desktop-portal
+	sane-find-scanner			# Scanners are often used for Man-on-the-Side vulnerabilities.
+	sane						# scanner
+	spice-vdagent				# RDP/Desktop Sharing
+	speech-dispatcher			# Speech synth
+	samba						# RDP (no longer installed by default, but some apps will try to reinstall it).
+	telnet						# A commonly abused protocol.
+	ubuntu-report				# Telemetry
+	#wpa_supplicant				# This disables the wifi broadcasting. If you don't need wifi, comment this out increases security.
+	xrdp						# Remote desktop binary
+	xbrlapi						# Speech tool
+	xdg-desktop-portal			# Desktop environment, but often slows down high-end PC's, and has an RDP protocol embedded inside too.
+	xdg-desktop-portal-gnome	# Same thing
 	hp-*
 	#sshd				# Optional stuff starts here.		
 )
@@ -109,7 +107,8 @@ touchScript() {			# touchScript "/full/path
 	fi
 }
 
-# Adds a line to a file only if it doesn't already exist (verbatim)
+# Description: Adds a line to a file only if it doesn't already exist (verbatim)
+# Usage: uniqueLine "line" "file"
 uniqueLine() {
 	line=$1 && file=$2	# uniqueLine "line" "file"
 	grep -qsxF -- "$line" "$file" || echo "$line" >> "$file"
@@ -138,7 +137,7 @@ serviceExists() {
 muteService() {
 	service="$1"
 	
-	# We need the full "cups.service" for some function, but we don't want to ruin "cups.socket", so we filter for those first.
+	# Services have a ".service", ".socket", ".path" appended to the end of their physical file.
 	if [[ ! "${service}" =~ \..+$ ]]; then
     		fullService="${service}.service"
     	else
@@ -184,18 +183,30 @@ for service in "${servicesBlacklist[@]}"; do
 	muteService "$service"
 done
 
-# Universal 'Do Not Track' environment variable.
-echo "export DO_NOT_TRACK=1" >> /home/$iam/.bashrc
+uniqueLine "export DO_NOT_TRACK=1" "/home/$iam/.bashrc" # Universal 'Do Not Track' environment variable. Not all developers check, respect, or care about this.
+uniqueLine "export GIO_NO_TRACKER=1" "/home/$iam/.profile" # An alternative to disabling TrackerMiner indexing services that should aid window times.
+uniqueLine "ADW_DEBUG_COLOR_SCHEME=prefer-dark" "/etc/environment" # standalone terminal command: echo "ADW_DEBUG_COLOR_SCHEME=prefer-dark" >> /etc/environment
+# If you use dark mode and it's not working for files and window explorers (usually due to Nvidia drivers), uncomment or run the above line to fix that.
 
-# An alternative to disabling TrackerMiner indexing services that should aid window times.
-echo "export GIO_NO_TRACKER=1" >> /home/$iam/.profile
-
-# Lowers the priority ('niceness') of the indexing service in the background, which halts way less.
+# Ubuntu's Indexing service (Tracker-Miner) can cause high and low-end CPU's to hang.
+# This lowers its execution priority in the background. The patch is not required to function, and does not meaningfully increase security.
 sed -si '/Exec=\/usr\/libexec\/tracker-miner-fs-3/s/^Exec=/&\/usr\/bin\/nice -n 13 /' \
 	/etc/xdg/autostart/tracker-miner-fs-3.desktop \
 	/usr/lib/systemd/user/tracker-miner-fs-3.service
 
+# Patch for the xdg-desktop-portal mute not always triggering on restart.
+# Pipewire *always* self-disables, so this is not the code itself that's the problem.
+uniqueLine "systemctl --user mask --now xdg-desktop-portal" "$startupService"
+uniqueLine "systemctl --user mask --now xdg-desktop-portal-gnome" "$startupService"
+
 chattr +i "$startupService"
+
+# Developers do not always respect The 'Do Not Track" environment variable, but we add it anyways.
+# This script does not set up multple users at once, but if it did - here is how you'd do it.
+if [ "$iam" != "$admin" ]; then
+	uniqueLine "export DO_NOT_TRACK=1" "/home/$iam/.bashrc"
+fi
+uniqueLine "export DO_NOT_TRACK=1" "/home/$admin/.bashrc"
 
 # Add a new systemctl service for our security script, so that our filters re-run at startup.
 cat <<EOF_FF > "/etc/systemd/system/${iam}sec.service"
