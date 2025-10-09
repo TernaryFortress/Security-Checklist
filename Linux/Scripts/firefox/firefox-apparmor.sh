@@ -3,7 +3,9 @@
 iam="${1:-$(logname)}"
 userProfile=$(ls -d /home/$iam/snap/firefox/common/.mozilla/firefox/*.default 2>/dev/null | head -n 1)
 apparmorPath="/var/lib/snapd/apparmor/profiles/snap.firefox.firefox"
-# Using the /usr/ path creates immutable phantom apparmor profiles that prevent firefox from ever updating.
+# For the most part, the directories that are able to be written to externally are:
+# /var/tmp, /dev, /memfd, and /tmp
+# These all should be protected to the fullest extent possible by any profile without fail.
 
 chattr -i "$apparmorPath"
 chmod +w "$apparmorPath"
