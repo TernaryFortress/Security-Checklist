@@ -17,8 +17,10 @@ nft add table inet firewall && nft delete table inet filter
 
 # We'll create some sets to make managing the requisite services easier.
 nft add set inet firewall tcp_net {type inet_service\; elements={53, 80, 443} \;}  # DNS, HTTP, HTTPS
-nft add set inet firewall udp_net {type inet_service\; elements={53, 123, 2408, 51820} \;}  # DNS, NTP, Cloudflare Warp, Wireguard
+nft add set inet firewall udp_net {type inet_service\; elements={53, 123, 443, 2408, 51820} \;}  # DNS, NTP, DNS-over-HTTPS, Cloudflare Warp, Wireguard
 nft add set inet firewall loopback_blacklist {type inet_service\; elements={631, 5353} \;}  # Printer, Network Sharing
+# THINGS YOU MIGHT WANT TO ADD LATER:
+# SSH: tcp port 22
 
 # ----- input chain -----
 nft add chain inet firewall input { type filter hook input priority -10 \; policy drop \; }
