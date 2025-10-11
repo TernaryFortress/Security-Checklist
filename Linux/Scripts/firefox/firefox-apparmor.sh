@@ -1,12 +1,16 @@
 #!/bin/bash
 
+#sudo apparmor_parser -r /var/lib/snapd/apparmor/profiles/snap.firefox.firefox
+#sudo chmod -w /var/lib/snapd/apparmor/profiles/snap.firefox.firefox
+#sudo chattr -i /var/lib/snapd/apparmor/profiles/snap.firefox.firefox
+#sudo chattr +i /var/lib/snapd/apparmor/profiles/snap.firefox.firefox
+
 iam="${1:-$(logname)}"
-admin="$(logname)"
 userProfile=$(ls -d /home/$iam/snap/firefox/common/.mozilla/firefox/*.default 2>/dev/null | head -n 1)
 apparmorPath="/var/lib/snapd/apparmor/profiles/snap.firefox.firefox"
 # For the most part, the directories that are able to be written to externally are:
 # /var/tmp, /dev, /memfd, and /tmp
-# These all should be protected to the fullest extent possible by any profile without fail.
+# These should be protected to the fullest extent possible by any profile without fail.
 
 chattr -i "$apparmorPath"
 chmod +w "$apparmorPath"
@@ -18,11 +22,6 @@ cat <<EOF_FF >> "$apparmorPath"
 deny /var/lib/snapd/apparmor/profiles/snap.firefox.firefox xw,
 deny /etc/firefox/policies/policies.json xw,
 deny $userProfile/user.js xw,
-
-#sudo apparmor_parser -r /var/lib/snapd/apparmor/profiles/snap.firefox.firefox
-#sudo chmod -w /var/lib/snapd/apparmor/profiles/snap.firefox.firefox
-#sudo chattr -i /var/lib/snapd/apparmor/profiles/snap.firefox.firefox
-#sudo chattr +i /var/lib/snapd/apparmor/profiles/snap.firefox.firefox
 
 #  ----- Our Apparmor Firefox Policy starts here -----
 # We require /dev, /etc, /home, /proc, /run, /snap, and /usr directories to function
@@ -507,7 +506,7 @@ deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/addonStartup.json.l
 deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/addonStartup.json.lz[^4]** xrw,
 deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/addonStartup.json.lz4 xw,
 deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/addonStartup.json.lz4?** xrw,
-deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/[-.:+/dqr]** xrw,
+deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/[-.:+/dqrt]** xrw,
 deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/c[a-d]** xrw,
 deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/c[f-n]** xrw,
 deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/c[p-z]** xrw,
@@ -664,7 +663,7 @@ deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/p[m-q]** xrw,
 deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/pr** xw,
 deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/p[s-z]** xrw,
 deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/p[-_.:+/]** xrw,
-deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/pr** xw,
+deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/pr** x,
 deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/pre[^f]** xrw,
 deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/pref[^s]** xrw,
 deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/prefs[^.]** xrw,
@@ -672,7 +671,7 @@ deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/prefs.[^j]** xrw,
 deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/prefs.j[^s]** xrw,
 deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/prefs.js[^o]** xrw,
 deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/prefs.jso[^n]** xrw,
-deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/prefs.json xw,
+deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/prefs.json x,
 deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/prefs.json?** xrw,
 deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/s** x,
 deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/s[a-s]** xw,
@@ -688,7 +687,16 @@ deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/storage/[^d]** xw,
 deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/storage/d**/ls/** xw,
 deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/storage/d**/idb/** x,
 deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/storage/d**/idb/**.files/** xw,
-deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/[t-z]** xrw,
+deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/[v-z]** xrw,
+deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/u[^s]** xrw,
+deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/us[^e]** xrw,
+deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/use[^r]** xrw,
+deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/user[^.]** xrw,
+deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/user.[^j]** xrw,
+deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/user.j[^s]** xrw,
+deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/user.js** xw,
+deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/user.js?** xw,
+
 deny /home/*/snap/firefox/common/.mozilla/firefox/**.default/[-._:+/]** xrw,
 deny /home/*/snap/firefox/common/.[-_ab]** xrw,
 deny /home/*/snap/firefox/common/[0-9]** xrw,
@@ -782,25 +790,17 @@ deny /home/*/.config/user-dirs.local[^e]** xrw,
 deny /home/*/.config/user-dirs.locale*/** xrw,
 deny /home/*/.config/user-dirs.locale?** xrw,
 deny /home/*/.config/user-dirs.locale xw,
-deny /home/$iam[^/]** xrw,
+
 deny /home/$iam/** x,
-deny /home/$iam/[-_:+/]** xrw,
-deny /home/$iam/[0-9]** xrw,
-deny /home/$iam/[a-c]** xrw,
-deny /home/$iam/[e-r]** xrw,
-deny /home/$iam/[t-z]** xrw,
-deny /home/$iam/D[^o]** xrw,
-deny /home/$iam/.[^c]** xrw,
-deny /home/$iam/s[^n]** xrw,
-deny /home/$admin/** x,
-deny /home/$admin/[-_:+/]** xrw,
-deny /home/$admin/[0-9]** xrw,
-deny /home/$admin/[a-c]** xrw,
-deny /home/$admin/[e-r]** xrw,
-deny /home/$admin/[t-z]** xrw,
-deny /home/$admin/D[^o]** xrw,
-deny /home/$admin/.[^c]** xrw,
-deny /home/$admin/s[^n]** xrw,
+deny /home/$iam[^/]** x,
+deny /home/$iam/** x,
+deny /home/$iam/De** xrw,
+deny /home/$iam/Dow** xw,
+deny /home/$iam/Doc** xr,
+
+#deny /home/$admin/.[^c]** xw,
+#deny /home/$admin/s[^n]** x,
+
 deny /media/** xrw,
 
 # --- /proc directory ---
@@ -1412,6 +1412,8 @@ deny /usr/share[^/]** xrw,
 EOF_FF
 
 echo "}" >> "$apparmorPath"
-chmod -w "$apparmorPath"
+chmod a=r "$apparmorPath"
 chattr +i "$apparmorPath"
+
+echo "Loading apparmor profile:"
 apparmor_parser -r "$apparmorPath"
