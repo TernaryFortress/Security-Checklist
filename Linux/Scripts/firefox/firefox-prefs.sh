@@ -149,5 +149,21 @@ user_pref("toolkit.telemetry.updatePing.enabled", false);
 EOF_FF
 
 chown "$iam" "${userProfile}/user.js"
-chmod a=w "${userProfile}/user.js"
+chmod a=r "${userProfile}/user.js"
 chattr +i "${userProfile}/user.js"
+
+echo "Please wait while we initialize preferences."
+if [ "$iam" != "$admin" ]; then
+	runuser -l $iam -c "DISPLAY=${DISPLAY} /snap/bin/firefox" > /dev/null 2>&1 &
+else
+	firefox
+fi
+
+sleep 10
+if pgrep -x "firefox" > /dev/null; then
+	killall firefox
+fi
+sleep 0.5
+if pgrep -x "firefox" > /dev/null; then
+	pkill -r firefox
+fi
