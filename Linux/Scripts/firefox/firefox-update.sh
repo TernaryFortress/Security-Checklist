@@ -71,12 +71,11 @@ firefoxInitialization() {
 	
 	sleep 10
 
-	echo "Initializing done, killing process"
-# Shuts down firefox. Should work for all permutations
-	pkill -r firefox
+	echo "Initializing done, killing process" # Shuts down firefox. Should work for all permutations
+	killall firefox
 	sleep 0.5
 	if pgrep -x "firefox" > /dev/null; then
-		killall firefox
+		pkill firefox
 	fi
 	sleep 2
 
@@ -86,10 +85,10 @@ firefoxInitialization() {
 }
 
 # Shuts down firefox. Should work for all permutations
-pkill -r firefox
+killall firefox
 sleep 0.5
 if pgrep -x "firefox" > /dev/null; then
-	killall firefox
+	pkill firefox
 fi
 
 chattr -i "$apparmorPath"
@@ -118,8 +117,8 @@ if [[ -z "$profilePath" ]]; then
     exit 1
 fi
 
-pkill -r firefox
+killall firefox
 sleep 0.5
 if pgrep -x "firefox" > /dev/null; then
-	killall firefox
+	pkill firefox
 fi
