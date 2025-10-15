@@ -17,6 +17,8 @@ The second configures a firewall and blacklists a bunch of services that have be
 
 Firefox is only supposed to be able to access & upload generic files from the Documents folder.
 
+DNS over HTTPS is disabled by default, because it overrides your computer's VPN. You should be using a VPN. If you are not, you should turn this feature on in firefox-policies. It will override your VPN's DNS blocklist. We will include a free VPN installation script shortly.
+
 ## Known Issues
 
 - [ ] - When using Firefox, attempting to upload files via the browser's File Explorer often does not work. Drag files into the browser to upload for now.
